@@ -19,5 +19,23 @@ public class ExamCardService {
 	public List<ExamCard> getAll() {
 		return examCardRepository.findAll();
 	}
+	
+	@GetMapping
+	public List<ExamCard> getByEmail(String createdBy){
+		return examCardRepository.findByCreatedBy(createdBy);
+	}
+
+	public List<ExamCard> getByDepartment(String department) {
+		return examCardRepository.findByDepartment(department);
+	}
+
+	public String createExamCard(ExamCard examCard) {
+		if(examCardRepository.save(examCard) != null) {
+			return "Success";
+		}
+		else {
+			return "Faild";
+		}
+	}
 
 }

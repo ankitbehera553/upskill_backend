@@ -2,6 +2,7 @@ package com.upskill.upskill.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +12,8 @@ public class ExamCard {
 
 	@Id
 	@Column(name="exam_id",nullable = false, unique = true)
-	@JsonProperty("examID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty("examId")
 	private int examId;
 
 	@Column(name="exam_type")
@@ -45,12 +47,17 @@ public class ExamCard {
 	@Column(nullable = false,name="created_by")
 	@JsonProperty("createdBy")
     private String createdBy;
-    
+	
+	@ElementCollection
+	@CollectionTable(name = "exam_questions", joinColumns = @JoinColumn(name = "exam_id"))
+	@Column(name = "question")
+	private List<String> questions;
+     
 	    // Constructors
     public ExamCard() {
     }
 
-    public ExamCard(String examType, String subject, String department, String teacherName, LocalDate endDate, int totalMark, String examName, String createdBy) {
+    public ExamCard(String examType, String subject, String department, String teacherName, LocalDate endDate, int totalMark, String examName, String createdBy, List<String> questions) {
         this.examType = examType;
         this.subject = subject;
         this.department = department;
@@ -59,6 +66,7 @@ public class ExamCard {
         this.totalMark = totalMark;
         this.examName = examName;
         this.createdBy = createdBy;
+        this.questions = questions;
     }
 	    // Getters and Setters
     public int getExamId() {
@@ -131,12 +139,20 @@ public class ExamCard {
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
+	
+	public List<String> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(List<String> questions) {
+		this.questions = questions;
+	}
 
 	@Override
 	public String toString() {
 		return "ExamCard [examId=" + examId + ", examType=" + examType + ", subject=" + subject + ", department="
 				+ department + ", teacherName=" + teacherName + ", endDate=" + endDate + ", totalMark=" + totalMark
-				+ ", examName=" + examName + ", createdBy=" + createdBy + "]";
+				+ ", examName=" + examName + ", createdBy=" + createdBy + ", questions="+ questions + "]";
 	}
 
 	
